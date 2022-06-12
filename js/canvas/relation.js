@@ -35,11 +35,10 @@ class Relation extends CanvasObject {
             height = y2 - y1,
             textRect = this.text.getBBox();
 
+        if(width<0) width = -width;
+        if(height<0) height = -height;
         this.width = width;
         this.height = height;
-
-        this.x = x1;
-        this.y = y1;
 
         this.textRect.setAttributeNS(null, 'width', textRect.width + 10);
         this.textRect.setAttributeNS(null, 'height', textRect.height + 10);
@@ -55,6 +54,10 @@ class Relation extends CanvasObject {
 
         this.line.setAttributeNS(null, 'x2', x2);
         this.line.setAttributeNS(null, 'y2', y2);
+
+        let lineRect = this.line.getBBox();
+        this.x = lineRect.x;
+        this.y = lineRect.y;
     }
 
     update() {

@@ -102,7 +102,6 @@ class Canvas {
             relationFields = this.relationObjects.querySelectorAll('.field'),
             i = 0,
             field,
-            toolboxRect = this.config.toolbox.getBoundingClientRect(),
             client = this.getPressPositions(e);
 
         if(useOriginal) {
@@ -114,14 +113,16 @@ class Canvas {
 
         for(i; i < fields.length; ++i) {
             field = fields[i].__instance__;
-            if(client.x > field.x && client.x < field.x + field.width + toolboxRect.width
+            if(client.x > field.x && client.x < field.x + field.width
             && client.y > field.y && client.y < field.y + field.height) {
                 return field;
             }
         }
         for(i=0; i < relationFields.length; ++i) {
             field = relationFields[i].__instance__;
-            if(client.x > field.x && client.x < field.x + field.width + toolboxRect.width
+            console.log(client.x ,'>', field.x , client.x ,'<', field.x + field.width
+               ,"&", client.y , '>' , field.y , client.y ,'<',field.y + field.height)
+            if(client.x > field.x && client.x < field.x + field.width
                 && client.y > field.y && client.y < field.y + field.height) {
                 return field;
             }
@@ -261,6 +262,7 @@ class Canvas {
         this.startY = this.dragStartY = client.y;
 
         let selectedField = this.isSelecting(e);
+        console.log(selectedField)
         if(selectedField && EditorGlobals.typeSelected==0) {
             this.currentSelected  = selectedField;
             this.mouseIsDraging = true;
