@@ -1,0 +1,156 @@
+body {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
+.editor {
+    display:flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* toolbox */
+
+.editor .toolbox {
+    width: 30px;
+    padding: 5px;
+    background-color: #efefef;
+    border-right: 1px solid #ccc;
+    text-align: center;
+}
+
+.editor .toolbox .tool {
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.editor .toolbox .seperator {
+    border-top: 1px solid #cccccc;
+    margin: 10px 0;
+}
+
+.editor .toolbox .tool.active {
+    background-color: #cccccc;
+}
+
+/* canvas */
+
+.editor .canvas {
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.editor .canvas:focus {
+    outline: none;
+}
+
+.editor .canvas .selector {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    fill: transparent;
+    display: none;
+}
+
+.editor .canvas .selector.show {
+    display: block;
+}
+
+.editor .canvas .lineSelector {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    display: none;
+}
+
+.editor .canvas .lineSelector.show {
+    display: block;
+}
+
+/* class object */
+
+.editor .canvas rect.canvas-field {
+    stroke: black;
+    stroke-width: 1;
+    fill: white;
+}
+
+.editor .canvas .field.class {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    fill: white;
+}
+
+.editor .canvas .field.class text {
+    alignment-baseline: hanging;
+    user-select: none;
+}
+
+.editor .canvas .field.relation line {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    stroke-dasharray: 4 4 4;
+}
+
+.editor .canvas .field.relation text,
+.editor .canvas .field.relation rect {
+    display: none;
+}
+
+.editor .canvas .field.relation text.visible,
+.editor .canvas .field.relation rect.visible {
+    display: block;
+}
+
+.editor .canvas .field.relation text {
+    alignment-baseline: hanging;
+    user-select: none;
+}
+
+.editor .canvas .field.relation  rect {
+    fill: white;
+}
+
+.editor .canvas .field.text {
+    user-select: none;
+}
+
+.editor .canvas .field.selected {
+    stroke: brown;
+}
+
+.editor .canvas .field.selected line {
+    stroke: brown;
+}
+
+/* properties */
+
+.editor .properties {
+    width: 300px;
+    padding: 10px;
+    background-color: #efefef;
+    border-left: 1px solid #cccccc;
+    overflow: auto;
+}
+
+.editor .properties .fields > div {
+    border-bottom: 1px solid #cccccc;
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+.editor .properties .fields > div input,
+.editor .properties .fields > div textarea,
+.editor .properties .fields > div select {
+    width: 100%;
+}
+
+.editor .properties .fields > div textarea {
+    height: 150px;
+}
+
+.editor .properties .fields > div > label {
+    display: block;
+    font-weight: bold;
+    padding: 10px 0;
+}

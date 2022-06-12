@@ -1,0 +1,47 @@
+.canvas-field {
+    fill: transparent;
+}
+
+.canvas-resizer {
+    fill: transparent;
+}
+
+.objects .field.class {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    fill: white;
+}
+
+.objects .field.class text {
+    alignment-baseline: hanging;
+    font-family: Arial;
+}
+
+.relations .field.relation line {
+    stroke-width:1;
+    stroke:rgb(0,0,0);
+    stroke-dasharray: 4 4 4;
+}
+
+.relations .field.relation text,
+.relations .field.relation rect {
+    display: none;
+}
+
+.relations .field.relation text.visible,
+.relations .field.relation rect.visible {
+    display: block;
+}
+
+.relations .field.relation text {
+    alignment-baseline: hanging;
+    font-family: Arial;
+}
+
+.objects .field.text {
+    font-family: Arial;
+}
+
+.relations .field.relation  rect {
+    fill: white;
+}

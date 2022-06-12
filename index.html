@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Class Diagram Editor</title>
+	<link rel="stylesheet" href="css/editor.css">
+	<script src="js/editorGlobals.js"></script>
+	<script src="js/toolbox.js"></script>
+	<script src="js/properties.js"></script>
+	<script src="js/canvas.js"></script>
+	<script src="js/editor.js"></script>
+	<script src="js/canvasObject.js"></script>
+	<script src="js/canvas/class.js"></script>
+	<script src="js/canvas/relation.js"></script>
+	<script src="js/canvas/text.js"></script>
+	<script src="js/properties/class.js"></script>
+	<script src="js/properties/relation.js"></script>
+	<script src="js/properties/text.js"></script>
+	<script>
+		window.onload = function () {
+            let editor = new Editor({
+                editor :  document.querySelector('.editor'),
+				canvas :  document.querySelector('.canvas'),
+				toolbox : document.querySelector('.toolbox'),
+				properties : document.querySelector('.properties')
+			});
+            editor.render();
+
+            EditorGlobals.editorInstance = editor;
+		}
+	</script>
+</head>
+<body>
+	<div class="editor">
+		<div class="toolbox"></div>
+		<div class="canvas"></div>
+		<div class="properties">
+
+		</div>
+	</div>
+</body>
+</html>
