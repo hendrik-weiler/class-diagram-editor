@@ -559,9 +559,8 @@ class Canvas {
 
     init() {
         this.config.canvas.appendChild(this.svg);
-        let rect =  this.config.canvas.getBoundingClientRect();
-        this.width = rect.width;
-        this.height = rect.height;
+        this.width = 800;
+        this.height = 600;
         this.svg.appendChild(this.zoomGroup);
         this.zoomGroup.appendChild(this.canvas);
         this.zoomGroup.appendChild(this.canvasResizer);

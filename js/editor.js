@@ -1,6 +1,23 @@
+/**
+ * The main editor class
+ *
+ * @author Hendrik Weiler
+ */
 class Editor {
+
+    /**
+     * The constructor
+     *
+     * @param config The configuration object
+     */
     constructor(config) {
 
+        /**
+         * Returns the configuration object
+         *
+         * @var config
+         * @type object
+         */
         this.config = Object.assign({
             editorInstance : this,
             editor : document.body,
@@ -28,7 +45,9 @@ class Editor {
             exportCSS = await fetch('css/export.css'),
             exportCSSContent = await exportCSS.text(),
             selector = svgClone.querySelector('.selector'),
-            lineSelector = svgClone.querySelector('.lineSelector');
+            lineSelector = svgClone.querySelector('.lineSelector'),
+            zoom = svgClone.querySelector('.zoom');
+        zoom.setAttributeNS(null,'transform','scale(1)');
         selector.remove();
         lineSelector.remove();
         style.innerHTML = exportCSSContent;
