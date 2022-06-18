@@ -12,9 +12,8 @@ With this editor you can create a class diagram and export it to a svg file.
 - Export to svg
 - Export data to javascript
 - Deleting selections with delete button
+- Move through canvas with space button + dragging
 
 ##### Todo
 
-- Documenting the code
-- Create developer reference
-- Move through canvas with space button + dragging
+- Finish documenting canvas class

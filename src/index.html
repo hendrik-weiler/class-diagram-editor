@@ -18,7 +18,7 @@
 	<script src="js/properties/text.js"></script>
 	<script>
 		window.onload = function () {
-            let editor = new Editor({
+            let editor = new Editor.Editor({
                 editor :  document.querySelector('.editor'),
 				canvas :  document.querySelector('.canvas'),
 				toolbox : document.querySelector('.toolbox'),
@@ -26,7 +26,7 @@
 			});
             editor.render();
 
-            EditorGlobals.editorInstance = editor;
+            window.Editor.EditorGlobals.editorInstance = editor;
 		}
 	</script>
 </head>

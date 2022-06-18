@@ -1,7 +1,30 @@
-class Canvas {
+if(!Editor) var Editor = {};
 
+/**
+ * The editors canvas
+ *
+ * @class Canvas
+ * @author Hendrik Weiler
+ * @namespace Editor
+ */
+Editor.Canvas = class {
+
+    /**
+     * Returns the width of the canvas
+     *
+     * @memberOf Canvas
+     * @type number
+     * @var width
+     */
     width = 0;
 
+    /**
+     * Returns the height of the canvas
+     *
+     * @memberOf Canvas
+     * @type number
+     * @var height
+     */
     height = 0;
 
     svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -41,6 +64,10 @@ class Canvas {
     mouseIsDraging = false;
 
     zoomLevel = 1;
+
+    spacePressed = false;
+
+    moveCanvas = false;
 
     constructor(config) {
 
@@ -263,7 +290,7 @@ class Canvas {
 
         let selectedField = this.isSelecting(e);
         console.log(selectedField)
-        if(selectedField && EditorGlobals.typeSelected==0) {
+        if(selectedField && window.Editor.EditorGlobals.typeSelected==0) {
             this.currentSelected  = selectedField;
             this.mouseIsDraging = true;
         } else {
@@ -275,6 +302,11 @@ class Canvas {
             && this.startY > canvasResizerRect.y && this.startY < canvasResizerRect.y + canvasResizerRect.height) {
             this.currentSelected = 'canvas';
             this.mouseIsDraging = true;
+        }
+
+        if(this.spacePressed) {
+            this.config.canvas.style.cursor = 'grabbing';
+            this.moveCanvas = true;
         }
 
         this.mousePressed = true;
@@ -296,6 +328,14 @@ class Canvas {
         this.endX = client.x;
         this.endY = client.y;
 
+        if(this.moveCanvas) {
+            let xDiff = this.endX - this.startX,
+                yDiff = this.endY - this.startY;
+            this.config.canvas.scrollTop -= yDiff;
+            this.config.canvas.scrollLeft -= xDiff;
+            return;
+        }
+
         if(this.mouseIsDraging && this.currentSelected == 'canvas') {
             this.setCanvasSize(
                 (this.width + client.x - this.startX) * this.zoomLevel,
@@ -307,7 +347,7 @@ class Canvas {
             return;
         }
 
-        if(this.mouseIsDraging && EditorGlobals.typeSelected==0) {
+        if(this.mouseIsDraging && window.Editor.EditorGlobals.typeSelected==0) {
 
             if(this.selectedFields.length > 1) {
                 let xDiff = this.endX - this.startX,
@@ -338,11 +378,11 @@ class Canvas {
         }
 
         // selection
-        if(EditorGlobals.typeSelected==0 && this.mousePressed) {
+        if(window.Editor.EditorGlobals.typeSelected==0 && this.mousePressed) {
             this.drawSelector();
         }
         // relation selector
-        if(EditorGlobals.typeSelected==2 && this.mousePressed) {
+        if(window.Editor.EditorGlobals.typeSelected==2 && this.mousePressed) {
             this.drawLineSelector();
         }
     }
@@ -364,6 +404,11 @@ class Canvas {
         this.endX = client.x;
         this.endY = client.y;
 
+        if(this.spacePressed) {
+            this.config.canvas.style.cursor = 'grab';
+            this.moveCanvas = false;
+        }
+
         if(this.currentSelected == 'canvas') {
             this.currentSelected = null;
             this.mouseIsDraging = false;
@@ -374,7 +419,7 @@ class Canvas {
 
         if(this.dragStartX == this.endX
             && this.dragStartY == this.endY
-            && EditorGlobals.typeSelected==0) {
+            && window.Editor.EditorGlobals.typeSelected==0) {
             if(e.ctrlKey) {
                 if(this.currentSelected.isSelected()) {
                     let i = 0,
@@ -414,7 +459,7 @@ class Canvas {
             return;
         }
 
-        if(EditorGlobals.typeSelected==0) {
+        if(window.Editor.EditorGlobals.typeSelected==0) {
             let selectedField = this.isSelecting(e);
             this.config.editorInstance.properties.showDeselect();
             this.deselectAll();
@@ -429,7 +474,7 @@ class Canvas {
 
         let selectorData = this.getSelectorData();
         // selection end
-        if(EditorGlobals.typeSelected==0) {
+        if(window.Editor.EditorGlobals.typeSelected==0) {
             this.selectedFields = this.isSelectingFromSelector();
             this.resetSelector();
             console.log(this.selectedFields)
@@ -439,8 +484,8 @@ class Canvas {
             }
         }
         // create class
-        if(EditorGlobals.typeSelected==1) {
-            let classObj = new Class({
+        if(window.Editor.EditorGlobals.typeSelected==1) {
+            let classObj = new window.Editor.Class({
                 name : 'Class',
                 inherit : '',
                 properties: [],
@@ -453,10 +498,10 @@ class Canvas {
             classObj.update();
         }
         // create relation
-        if(EditorGlobals.typeSelected==2) {
+        if(window.Editor.EditorGlobals.typeSelected==2) {
             let relation = this.getRelationConnection();
             if(relation.success) {
-                let relationObj = new Relation({
+                let relationObj = new window.Editor.Relation({
                     label : '',
                     class1 : relation.class1,
                     class2: relation.class2
@@ -468,8 +513,8 @@ class Canvas {
             }
         }
         // create text
-        if(EditorGlobals.typeSelected==3) {
-            let textObj = new Text({
+        if(window.Editor.EditorGlobals.typeSelected==3) {
+            let textObj = new window.Editor.Text({
                 text : 'Text',
                 size: 14
             }),
@@ -506,7 +551,21 @@ class Canvas {
         }
     }
 
+    keyDown(e) {
+        // space
+        if(e.keyCode == 32) {
+            e.preventDefault();
+            this.spacePressed = true;
+            if(!this.moveCanvas) {
+                this.config.canvas.style.cursor = 'grab';
+            }
+        }
+    }
+
     keyUp(e) {
+
+        this.spacePressed = false;
+        this.config.canvas.style.cursor = '';
 
         // delete
         if(e.keyCode == 46) {
@@ -523,7 +582,7 @@ class Canvas {
             // delete current selected
             } else {
                 if(this.currentSelected) {
-                    if(this.currentSelected instanceof Relation) {
+                    if(this.currentSelected instanceof Editor.Relation) {
                         this.currentSelected.baseNode.remove();
                     } else {
                         this.removeRelationsFromClass(this.currentSelected);
@@ -549,12 +608,18 @@ class Canvas {
         this.setZoom(this.zoomLevel);
     }
 
+    mouseenter(e) {
+        this.config.canvas.focus();
+    }
+
     setEvents() {
+        this.config.canvas.addEventListener('mouseenter', this.mouseenter.bind(this), false);
         this.config.canvas.addEventListener('mousedown', this.mouseDown.bind(this), false);
         this.config.canvas.addEventListener('mousemove', this.mouseMove.bind(this), false);
         this.config.canvas.addEventListener('mouseup', this.mouseUp.bind(this), false);
         this.config.canvas.addEventListener("contextmenu", e => e. preventDefault());
         this.config.canvas.addEventListener('keyup', this.keyUp.bind(this), false);
+        this.config.canvas.addEventListener('keydown', this.keyDown.bind(this), false);
     }
 
     init() {
@@ -572,6 +637,7 @@ class Canvas {
         this.selector.classList.add('selector');
         this.lineSelector.classList.add('lineSelector');
         this.setEvents();
+        this.mouseenter();
     }
 
 }

@@ -1,4 +1,21 @@
-class Properties {
+if(!Editor) var Editor = {};
+
+/**
+ * Handles the properties panel
+ *
+ * @author Hendrik Weiler
+ * @class Properties
+ * @namespace Editor
+ */
+Editor.Properties = class {
+
+    /**
+     * The constructor
+     *
+     * @memberOf Properties
+     * @method constructor
+     * @param object config The configuration object
+     */
     constructor(config) {
 
         this.config = Object.assign({
@@ -10,6 +27,16 @@ class Properties {
 
     }
 
+    /**
+     * Create a textarea property
+     *
+     * @param CanvasObject field The field
+     * @param object fieldDef The field definition object
+     * @param string name The field name
+     * @param HTMLElement fieldsNode The container for properties
+     * @memberOf Properties
+     * @method insertTextareaProperty
+     */
     insertTextareaProperty(field, fieldDef, name, fieldsNode) {
         let container = document.createElement('div'),
             label = document.createElement('label'),
@@ -28,6 +55,16 @@ class Properties {
         fieldsNode.appendChild(container);
     }
 
+    /**
+     * Create a text property
+     *
+     * @param CanvasObject field The field
+     * @param object fieldDef The field definition object
+     * @param string name The field name
+     * @param HTMLElement fieldsNode The container for properties
+     * @memberOf Properties
+     * @method insertTextProperty
+     */
     insertTextProperty(field, fieldDef, name, fieldsNode) {
         let container = document.createElement('div'),
             label = document.createElement('label'),
@@ -48,6 +85,16 @@ class Properties {
         fieldsNode.appendChild(container);
     }
 
+    /**
+     * Create a select property
+     *
+     * @param CanvasObject field The field
+     * @param object fieldDef The field definition object
+     * @param string name The field name
+     * @param HTMLElement fieldsNode The container for properties
+     * @memberOf Properties
+     * @method insertSelectProperty
+     */
     insertSelectProperty(field, fieldDef, name, fieldsNode) {
         let container = document.createElement('div'),
             label = document.createElement('label'),
@@ -78,11 +125,29 @@ class Properties {
         fieldsNode.appendChild(container);
     }
 
+    /**
+     * Updates the canvas
+     *
+     * @param CanvasObject field The field instance
+     * @memberOf Properties
+     * @method updateCanvas
+     */
     updateCanvas(field) {
         field.update();
         this.config.editorInstance.canvas.updateRelations();
     }
 
+    /**
+     * Updates the value of a field property of a list property (panel)
+     *
+     * @memberOf Properties
+     * @method updateListData
+     * @param CanvasObjebct field The canvas element instance
+     * @param string property The property name of the element
+     * @param string listProperty The list property name
+     * @param string value The value to set
+     * @param number index The list properties index number
+     */
     updateListData(field, property, listProperty, value, index) {
         if(typeof field.data[property] != "undefined") {
             if(typeof field.data[property][index] != "undefined") {
@@ -108,6 +173,8 @@ class Properties {
      * @param fields The fields definition
      * @param name The property name
      * @returns object
+     * @memberOf Properties
+     * @method generateListEntry
      */
     generateListEntry(listContainer, field, fields, name) {
         let container = document.createElement('div'),
@@ -235,6 +302,16 @@ class Properties {
         return obj;
     }
 
+    /**
+     * Fills the inputs of a list property entry
+     *
+     * @memberOf Properties
+     * @method fillListEntry
+     * @param HTMLElement listContainer The list property container node
+     * @param number index The list property index number
+     * @param array fields A list of fields definitions
+     * @param object listData The field instances data property
+     */
     fillListEntry(listContainer, index, fields, listData) {
         let obj = listData[index],
             i = 0,
@@ -258,6 +335,16 @@ class Properties {
         }
     }
 
+    /**
+     * Create a list property
+     *
+     * @param CanvasObject field The field
+     * @param object fieldDef The field definition object
+     * @param string name The field name
+     * @param HTMLElement fieldsNode The container for properties
+     * @memberOf Properties
+     * @method insertListProperty
+     */
     insertListProperty(field, fieldDef, name, fieldsNode) {
         let container = document.createElement('div'),
             label = document.createElement('label'),
@@ -286,12 +373,25 @@ class Properties {
         fieldsNode.appendChild(container);
     }
 
+    /**
+     * Shows the deselect screen
+     *
+     * @memberOf Properties
+     * @method showDeselect
+     */
     showDeselect() {
         this.config.properties.innerHTML = `
             <p>Please select an object to edit</p>
         `;
     }
 
+    /**
+     * Shows the properties of a field
+     *
+     * @memberOf Properties
+     * @method showProperties
+     * @param CanvasObject field The canvas element instance
+     */
     showProperties(field) {
         let definition = PropertiesDefinition[field.type],
             markup = `

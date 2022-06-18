@@ -1,14 +1,21 @@
+if(!Editor) var Editor = {};
+
 /**
  * The main editor class
  *
  * @author Hendrik Weiler
+ * @namespace Editor
+ * @class Editor
  */
-class Editor {
+Editor.Editor = class {
 
     /**
      * The constructor
      *
-     * @param config The configuration object
+     * @param object config The configuration object
+     * @memberOf Editor
+     * @constructor
+     * @method constructor
      */
     constructor(config) {
 
@@ -17,6 +24,7 @@ class Editor {
          *
          * @var config
          * @type object
+         * @memberOf Editor
          */
         this.config = Object.assign({
             editorInstance : this,
@@ -26,17 +34,44 @@ class Editor {
             properties:document.body
         }, config);
 
-        this.properties = new Properties(this.config);
+        /**
+         * Returns the properties instance
+         *
+         * @var properties
+         * @type Properties
+         * @memberOf Editor
+         */
+        this.properties = new Editor.Properties(this.config);
 
-        this.toolbox = new Toolbox(this.config);
+        /**
+         * Returns the toolbox instance
+         *
+         * @var toolbox
+         * @type Toolbox
+         * @memberOf Editor
+         */
+        this.toolbox = new Editor.Toolbox(this.config);
 
-        this.canvas = new Canvas(this.config);
+        /**
+         * Returns the canvas instance
+         *
+         * @var canvas
+         * @type Canvas
+         * @memberOf Editor
+         */
+        this.canvas = new Editor.Canvas(this.config);
 
         let propertiesRect = this.config.properties.getBoundingClientRect(),
             toolboxRect = this.config.toolbox.getBoundingClientRect();
         this.config.canvas.style.width = window.innerWidth - propertiesRect.width - toolboxRect.width + 'px';
     }
 
+    /**
+     * Exports the diagram to a svg
+     *
+     * @method exportSVG
+     * @memberOf Editor
+     */
     async exportSVG() {
         let link = document.createElement('a'),
             svgClone = this.canvas.svg.cloneNode(true),
@@ -58,6 +93,12 @@ class Editor {
         link.click();
     }
 
+    /**
+     * Exports the diagram to a javascript file
+     *
+     * @method exportAsJS
+     * @memberOf Editor
+     */
     exportAsJS() {
         let link = document.createElement('a'),
             fields = this.canvas.canvasObjects.querySelectorAll('.field'),
@@ -117,15 +158,9 @@ class Editor {
                         }
                         jsData.push('\t*/');
                     }
-                    if(method.visibility == 'private') {
-                        jsData.push("\t#" + method.name.replaceAll(' ','_') + '() {');
-                        jsData.push('\t\t');
-                        jsData.push('\t}');
-                    } else {
-                        jsData.push("\t" + method.name.replaceAll(' ','_') + '() {');
-                        jsData.push('\t\t');
-                        jsData.push('\t}');
-                    }
+                    jsData.push("\t" + method.name.replaceAll(' ','_') + '() {');
+                    jsData.push('\t\t');
+                    jsData.push('\t}');
                     jsData.push('');
                 }
                 jsData.push('');
@@ -138,6 +173,12 @@ class Editor {
         link.click();
     }
 
+    /**
+     * Builds the user interface
+     *
+     * @memberOf Editor
+     * @method buildUI
+     */
     buildUI() {
         this.toolbox.addTool("Selection","img/cursor.svg",0);
 
@@ -168,6 +209,12 @@ class Editor {
         }.bind(this));
     }
 
+    /**
+     * Renders the editor
+     *
+     * @memberOf Editor
+     * @method render
+     */
     render() {
         this.buildUI();
         this.canvas.init();

@@ -1,13 +1,57 @@
-class Class extends CanvasObject {
+if(!Editor) var Editor = {};
 
+/**
+ * The class canvas object
+ *
+ * @class Class
+ * @author Hendrik Weiler
+ * @extends Editor.CanvasObject
+ * @namespace Editor
+ */
+Editor.Class = class extends Editor.CanvasObject {
+
+    /**
+     * Returns the type of the canvas object
+     *
+     * @memberOf Class
+     * @type string
+     * @var type
+     */
     type = 'Class';
 
+    /**
+     * Returns the container rect element
+     *
+     * @memberOf Class
+     * @var container
+     * @type SVGRectElement
+     */
     container = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 
+    /**
+     * Returns the properties rect element
+     *
+     * @memberOf Class
+     * @var properties
+     * @type SVGRectElement
+     */
     properties = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 
+    /**
+     * Returns the text element
+     *
+     * @memberOf Class
+     * @var textName
+     * @type SVGTextElement
+     */
     textName = document.createElementNS("http://www.w3.org/2000/svg", 'text');
 
+    /**
+     * Creates the appeareance of the canvas object
+     *
+     * @memberOf Class
+     * @method createAppeareance
+     */
     createAppeareance() {
         this.baseNode = document.createElementNS("http://www.w3.org/2000/svg", 'g');
         this.baseNode.classList.add('class');
@@ -24,12 +68,26 @@ class Class extends CanvasObject {
         this.baseNode.appendChild(this.properties);
     }
 
+    /**
+     * Sets the position of the canvas object
+     *
+     * @memberOf Class
+     * @method setPosition
+     * @param number x The x position
+     * @param number y The y position
+     */
     setPosition(x,y) {
         this.baseNode.setAttributeNS(null, 'transform', "translate(" + x + " " + y + ")");
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Creates the properties inside of the class object
+     *
+     * @memberOf Class
+     * @method fillInProperties
+     */
     fillInProperties() {
         let i = 0,
             property,
@@ -57,6 +115,12 @@ class Class extends CanvasObject {
         this.properties.setAttributeNS(null, 'height', y);
     }
 
+    /**
+     * Resizes the width of the class object
+     *
+     * @memberOf Class
+     * @method resizeWidth
+     */
     resizeWidth() {
         let textNameRect = this.textName.getBBox(),
             properties = this.baseNode.querySelectorAll('.property'),
@@ -107,6 +171,12 @@ class Class extends CanvasObject {
         this.container.setAttributeNS(null, 'height', this.height);
     }
 
+    /**
+     * Updates the classes class name and inherited class name
+     *
+     * @memberOf Class
+     * @method updateClassText
+     */
     updateClassText()  {
         this.textName.innerHTML = this.data.name;
         if(this.data.inherit.length > 0) {
@@ -116,6 +186,12 @@ class Class extends CanvasObject {
         this.textName.setAttributeNS(null,'x',this.width / 2 - rect.width / 2);
     }
 
+    /**
+     * Updates the canvas object
+     *
+     * @memberOf Class
+     * @method update
+     */
     update() {
         super.update();
 
@@ -127,6 +203,14 @@ class Class extends CanvasObject {
         this.updateClassText();
     }
 
+    /**
+     * Sets the size of the canvas object
+     *
+     * @memberOf Class
+     * @method setSize
+     * @param number width The width
+     * @param number height The height
+     */
     setSize(width, height) {
         this.container.setAttributeNS(null, 'width', width);
         this.container.setAttributeNS(null, 'height', height);

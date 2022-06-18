@@ -1,13 +1,59 @@
-class Relation extends CanvasObject {
+if(!Editor) var Editor = {};
 
+/**
+ * The relation canvas object
+ *
+ * @class Relation
+ * @author Hendrik Weiler
+ * @extends Editor.CanvasObject
+ * @namespace Editor
+ */
+Editor.Relation = class extends Editor.CanvasObject {
+
+    /**
+     * Returns the type of the canvas object
+     *
+     * @type string
+     * @var type
+     * @memberOf CanvasObject
+     */
     type = 'Relation';
 
+    /**
+     * Returns the line node
+     *
+     * @type SVGLineElement
+     * @var line
+     * @memberOf Relation
+     */
     line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
 
+    /**
+     * Returns the text node
+     *
+     * @type SVGTextElement
+     * @var text
+     * @memberOf Relation
+     */
     text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
 
+    /**
+     * Returns the rect node
+     *
+     * Its the background of the text node
+     *
+     * @type SVGRectElement
+     * @var textRect
+     * @memberOf Relation
+     */
     textRect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 
+    /**
+     * Creates the appeareance of the canvas object
+     *
+     * @memberOf Relation
+     * @method createAppeareance
+     */
     createAppeareance() {
         this.baseNode = document.createElementNS("http://www.w3.org/2000/svg", 'g');
         this.baseNode.classList.add('relation');
@@ -17,6 +63,14 @@ class Relation extends CanvasObject {
         this.baseNode.appendChild(this.text);
     }
 
+    /**
+     * Sets the position of the canvas object
+     *
+     * @memberOf Relation
+     * @method setPosition
+     * @param number x The x position
+     * @param number y The y position
+     */
     setPosition(x, y) {
 
         if(this.text.innerHTML.length == 0) {
@@ -60,6 +114,12 @@ class Relation extends CanvasObject {
         this.y = lineRect.y;
     }
 
+    /**
+     * Updates the canvas object
+     *
+     * @memberOf Relation
+     * @method update
+     */
     update() {
         super.update();
 
