@@ -147,8 +147,6 @@ Editor.Canvas = class {
         }
         for(i=0; i < relationFields.length; ++i) {
             field = relationFields[i].__instance__;
-            console.log(client.x ,'>', field.x , client.x ,'<', field.x + field.width
-               ,"&", client.y , '>' , field.y , client.y ,'<',field.y + field.height)
             if(client.x > field.x && client.x < field.x + field.width
                 && client.y > field.y && client.y < field.y + field.height) {
                 return field;
@@ -166,8 +164,8 @@ Editor.Canvas = class {
             selection = [];
         for(i; i < fields.length; ++i) {
             field = fields[i].__instance__;
-            if(field.x > selectorData.x && selectorData.x + field.width + toolboxRect.width < selectorData.x + selectorData.width
-                && field.y > selectorData.y && selectorData.y + field.height < selectorData.y + selectorData.height) {
+            if(field.x > selectorData.x && field.x + field.width < selectorData.x + selectorData.width
+                && field.y > selectorData.y && field.y + field.height < selectorData.y + selectorData.height) {
                 selection.push(field);
             }
         }
@@ -213,8 +211,7 @@ Editor.Canvas = class {
             x1,
             y1,
             x2,
-            y2,
-            toolboxRect = this.config.toolbox.getBoundingClientRect();
+            y2;
 
         x2 = this.startX + xDiff;
         x1 = this.startX;
@@ -289,8 +286,8 @@ Editor.Canvas = class {
         this.startY = this.dragStartY = client.y;
 
         let selectedField = this.isSelecting(e);
-        console.log(selectedField)
-        if(selectedField && window.Editor.EditorGlobals.typeSelected==0) {
+
+        if(selectedField && Editor.EditorGlobals.typeSelected==0) {
             this.currentSelected  = selectedField;
             this.mouseIsDraging = true;
         } else {
@@ -347,7 +344,7 @@ Editor.Canvas = class {
             return;
         }
 
-        if(this.mouseIsDraging && window.Editor.EditorGlobals.typeSelected==0) {
+        if(this.mouseIsDraging && Editor.EditorGlobals.typeSelected==0) {
 
             if(this.selectedFields.length > 1) {
                 let xDiff = this.endX - this.startX,
@@ -378,11 +375,11 @@ Editor.Canvas = class {
         }
 
         // selection
-        if(window.Editor.EditorGlobals.typeSelected==0 && this.mousePressed) {
+        if(Editor.EditorGlobals.typeSelected==0 && this.mousePressed) {
             this.drawSelector();
         }
         // relation selector
-        if(window.Editor.EditorGlobals.typeSelected==2 && this.mousePressed) {
+        if(Editor.EditorGlobals.typeSelected==2 && this.mousePressed) {
             this.drawLineSelector();
         }
     }
@@ -419,7 +416,7 @@ Editor.Canvas = class {
 
         if(this.dragStartX == this.endX
             && this.dragStartY == this.endY
-            && window.Editor.EditorGlobals.typeSelected==0) {
+            && Editor.EditorGlobals.typeSelected==0) {
             if(e.ctrlKey) {
                 if(this.currentSelected.isSelected()) {
                     let i = 0,
@@ -459,7 +456,7 @@ Editor.Canvas = class {
             return;
         }
 
-        if(window.Editor.EditorGlobals.typeSelected==0) {
+        if(Editor.EditorGlobals.typeSelected==0) {
             let selectedField = this.isSelecting(e);
             this.config.editorInstance.properties.showDeselect();
             this.deselectAll();
@@ -474,17 +471,19 @@ Editor.Canvas = class {
 
         let selectorData = this.getSelectorData();
         // selection end
-        if(window.Editor.EditorGlobals.typeSelected==0) {
+        if(Editor.EditorGlobals.typeSelected==0) {
             this.selectedFields = this.isSelectingFromSelector();
             this.resetSelector();
-            console.log(this.selectedFields)
             this.deselectAll();
             for(let i=0; i < this.selectedFields.length; ++i) {
                 this.selectedFields[i].select();
             }
+            if(this.selectedFields.length==1) {
+                this.config.editorInstance.properties.showProperties(this.selectedFields[0]);
+            }
         }
         // create class
-        if(window.Editor.EditorGlobals.typeSelected==1) {
+        if(Editor.EditorGlobals.typeSelected==1) {
             let classObj = new window.Editor.Class({
                 name : 'Class',
                 inherit : '',
@@ -498,7 +497,7 @@ Editor.Canvas = class {
             classObj.update();
         }
         // create relation
-        if(window.Editor.EditorGlobals.typeSelected==2) {
+        if(Editor.EditorGlobals.typeSelected==2) {
             let relation = this.getRelationConnection();
             if(relation.success) {
                 let relationObj = new window.Editor.Relation({
@@ -513,12 +512,11 @@ Editor.Canvas = class {
             }
         }
         // create text
-        if(window.Editor.EditorGlobals.typeSelected==3) {
+        if(Editor.EditorGlobals.typeSelected==3) {
             let textObj = new window.Editor.Text({
                 text : 'Text',
                 size: 14
-            }),
-            toolboxRect = this.config.toolbox.getBoundingClientRect();
+            });
             textObj.render();
             textObj.setPosition(client.x, client.y);
             this.addCanvasObject(1, textObj);
