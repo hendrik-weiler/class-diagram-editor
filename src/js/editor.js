@@ -113,7 +113,7 @@ Editor.Editor = class {
             jsData = [];
         for(i; i < fields.length; ++i) {
             field = fields[i].__instance__;
-            if(field instanceof Class) {
+            if(field instanceof Editor.Class) {
                 fieldData = field.data;
                 if(fieldData.description.length > 0) {
                     jsData.push('/**');

@@ -350,11 +350,61 @@ Editor.Canvas = class {
                 let xDiff = this.endX - this.startX,
                     yDiff = this.endY - this.startY,
                     i = 0,
-                    field;
+                    field,
+                    newX,
+                    newY,
+                    atEndDiffBelowX = 0,
+                    atEndDiffBelowY = 0,
+                    atEndDiffAboveX = 0,
+                    atEndDiffAboveY = 0,
+                    endReachedIndexX = -1,
+                    endReachedIndexY = -1;
 
-                for(i; i < this.selectedFields.length; ++i) {
+                for(i=0; i < this.selectedFields.length; ++i) {
                     field = this.selectedFields[i];
-                    field.setPosition(field.x + xDiff, field.y + yDiff);
+                    newX = field.x + xDiff;
+                    newY = field.y + yDiff;
+                    if(newX > this.width - field.width) {
+                        atEndDiffAboveX = xDiff;
+                        endReachedIndexX = i;
+                    }
+                    if(newY > this.height - field.height) {
+                        atEndDiffAboveY = yDiff;
+                        endReachedIndexY = i;
+                    }
+                }
+                console.log(this.selectedFields, endReachedIndexX, endReachedIndexY)
+                for(i=0; i < this.selectedFields.length; ++i) {
+                    field = this.selectedFields[i];
+                    newX = field.x + xDiff;
+                    newY = field.y + yDiff;
+                    if(newX < 0) {
+                        atEndDiffBelowX = -newX;
+                        newX = 0;
+                    } else {
+                        newX += atEndDiffBelowX;
+                    }
+                    if(newY < 0) {
+                        atEndDiffBelowY = -newY;
+                        newY = 0;
+                    } else {
+                        newY += atEndDiffBelowY;
+                    }
+                    if(endReachedIndexX == i) {
+                        newX = this.width - field.width;
+                        atEndDiffAboveX = xDiff;
+                        field.setPosition(newX, newY);
+                    }
+                    if(endReachedIndexY == i) {
+                        newY = this.height - field.height;
+                        atEndDiffAboveY = yDiff;
+                        field.setPosition(newX, newY);
+                    }
+                    if(endReachedIndexX >= 0 || endReachedIndexY >= 0) {
+                        field.setPosition(field.x - atEndDiffAboveX, field.y - atEndDiffAboveY);
+                        continue;
+                    }
+                    field.setPosition(newX, newY );
                 }
 
                 this.updateRelations();
@@ -363,9 +413,17 @@ Editor.Canvas = class {
                 this.startY = this.endY;
             } else {
                 let xDiff = this.endX - this.startX,
-                    yDiff = this.endY - this.startY;
+                    yDiff = this.endY - this.startY,
+                    newX,
+                    newY;
 
-                this.currentSelected.setPosition(this.currentSelected.x + xDiff, this.currentSelected.y + yDiff);
+                newX = this.currentSelected.x + xDiff;
+                newY = this.currentSelected.y + yDiff;
+                if(newX < 0) newX = 0;
+                if(newY < 0) newY = 0;
+                if(newX > this.width - this.currentSelected.width) newX = this.width - this.currentSelected.width;
+                if(newY > this.height - this.currentSelected.height) newY = this.height - this.currentSelected.height;
+                this.currentSelected.setPosition(newX, newY);
 
                 this.updateRelations();
                 this.startX = this.endX;

@@ -150,16 +150,18 @@ Editor.Class = class extends Editor.CanvasObject {
             startY = parseInt(this.properties.getAttributeNS(null,'y')) + height + 10,
             y = startY,
             textRect,
-            methods = this.baseNode.querySelectorAll('.method');
+            methods = this.baseNode.querySelectorAll('.method'),
+            parameters;
         for(i=0; i < methods.length; ++i)  {
             methods[i].remove();
         }
         for(i=0;i < this.data.methods.length; ++i) {
             method = this.data.methods[i];
+            parameters = method.parameters.split('\n');
             text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
             text.classList.add('method');
             text.setAttributeNS(null, 'x', 5);
-            text.innerHTML = '+ ' + method.visibility + ' ' + method.name + '()';
+            text.innerHTML = '+ ' + method.visibility + ' ' + method.name + '(' + parameters.join(', ') + ')';
             this.baseNode.appendChild(text);
             textRect = text.getBBox();
             if(i>0) {
