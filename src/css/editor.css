@@ -5,6 +5,19 @@ body {
     font-family: Arial;
 }
 
+* {
+    box-sizing: border-box;
+}
+
+a {
+    color: brown;
+}
+
+a:hover,
+a:active {
+    color: #ce3636;;
+}
+
 .editor {
     display:flex;
     width: 100%;
@@ -14,9 +27,8 @@ body {
 /* toolbox */
 
 .editor .toolbox {
-    width: 30px;
+    width: 40px;
     padding: 5px;
-    background-color: #efefef;
     border-right: 1px solid #ccc;
     text-align: center;
 }
@@ -40,6 +52,7 @@ body {
 .editor .canvas {
     flex-grow: 1;
     overflow: auto;
+    background-image: url("../img/canvas-bg.png");
 }
 
 .editor .canvas:focus {
@@ -73,6 +86,10 @@ body {
     stroke: black;
     stroke-width: 1;
     fill: white;
+}
+
+.editor .canvas rect.canvas-resizer {
+    cursor: move;
 }
 
 .editor .canvas .field.class {
@@ -128,9 +145,25 @@ body {
 .editor .properties {
     width: 300px;
     padding: 10px;
-    background-color: #efefef;
     border-left: 1px solid #cccccc;
     overflow: auto;
+}
+
+.editor .properties h2 {
+    margin: 5px 0;
+}
+
+.editor .properties button {
+    padding: 5px 10px;
+    background: brown;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.editor .properties button:hover {
+    background: #ce3636;
 }
 
 .editor .properties .fields > div {
@@ -143,10 +176,24 @@ body {
 .editor .properties .fields > div textarea,
 .editor .properties .fields > div select {
     width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.editor .properties .fields > div input:focus,
+.editor .properties .fields > div textarea:focus,
+.editor .properties .fields > div select:focus {
+    outline-color: brown;
+}
+
+.editor .properties .fields > div .list label {
+    margin: 10px 0;
+    display: block;
 }
 
 .editor .properties .fields > div textarea {
-    height: 150px;
+    height: 100px;
 }
 
 .editor .properties .fields > div > label {

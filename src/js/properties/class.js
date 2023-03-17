@@ -68,9 +68,9 @@ PropertiesDefinition.Class = {
                     name : 'name'
                 },
                 {
-                    label : 'Parameters',
+                    label : 'Parameters (seperated by newline)',
                     type: 'textarea',
-                    name : 'name'
+                    name : 'parameters'
                 },
                 {
                     label : 'Visibility',
